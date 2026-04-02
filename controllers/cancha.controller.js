@@ -2,8 +2,11 @@ const { checkUser } = require("../middlewares/check-user");
 const { checkAdmin } = require("../middlewares/check-admin");
 
 module.exports = (app, db) => {
-    app.get('/canchas', async (req, res) => {
+    
+    app.get('/canchas', checkUser, async (req, res) => {
+        
         const listaCanchas = await db.Cancha.findAll();
+
         res.render('canchas/list-canchas', { canchas: listaCanchas });
     });
 
@@ -25,6 +28,7 @@ module.exports = (app, db) => {
 
     app.get('/canchas/editar/:id', checkAdmin, async (req, res) => {
         const idCancha = req.params.id;
+        
         const cancha = await db.Cancha.findByPk(idCancha);
         const tipos = await db.TipoCancha.findAll();
         

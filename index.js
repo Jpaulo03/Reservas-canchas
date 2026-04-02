@@ -17,22 +17,8 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(session({
-    secret: 'clave_secreta_para_reservas_super_segura',
-    resave: false,
-    saveUninitialized: false
-}));
-
-app.use((req, res, next) => {
-    res.locals.user = req.session.user || null;
-    next();
-});
-
 app.get('/', (req, res) => {
-    res.redirect('/canchas');
+    res.send('El sistema de reservas está listo para jugar');
 });
 
 require('./controllers')(app, db);
