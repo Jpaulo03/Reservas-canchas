@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
     res.send('El sistema de reservas está listo para jugar');
 });
 
+require('./controllers')(app, db);
 
 db.sequelize.sync({
     // force: true
