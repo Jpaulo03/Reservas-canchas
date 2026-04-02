@@ -1,9 +1,10 @@
 const { checkUser } = require("../middlewares/check-user");
+const { checkAdmin } = require("../middlewares/check-admin");
 
 module.exports = (app, db) => {
     
     
-    app.get('/horarios/nuevo/:cancha_id', checkUser, async (req, res) => {
+    app.get('/horarios/nuevo/:cancha_id', checkAdmin, async (req, res) => {
 
         const idDeLaCancha = req.params.cancha_id;
 
@@ -12,7 +13,7 @@ module.exports = (app, db) => {
         res.render('horarios/form-horario', { cancha: cancha });
     });
 
-    app.post('/horarios/nuevo/:cancha_id', checkUser, async (req, res) => {
+    app.post('/horarios/nuevo/:cancha_id', checkAdmin, async (req, res) => {
         const idDeLaCancha = req.params.cancha_id;
         
         const { fecha, hora_inicio, hora_fin } = req.body;
