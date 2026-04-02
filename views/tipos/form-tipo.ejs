@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3><%= tipo ? 'Editar Tipo' : 'Nuevo Tipo' %></h3>
+                <form action="<%= tipo ? '/admin/tipos/editar/'+tipo.id : '/admin/tipos/nuevo' %>" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Deporte</label>
+                        <input type="text" name="nombre" class="form-control" value="<%= tipo ? tipo.nombre : '' %>" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer') %>

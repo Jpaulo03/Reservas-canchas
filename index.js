@@ -8,7 +8,6 @@ const db = require('./models');
 const seed = require('./config/seed');
 
 app.set('view engine', 'ejs');
-
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(session({
@@ -16,9 +15,13 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
 
 app.get('/', (req, res) => {
-    res.send('El sistema de reservas está listo para jugar');
+    res.redirect('/canchas');
 });
 
 require('./controllers')(app, db);

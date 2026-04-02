@@ -3,7 +3,7 @@ const { checkAdmin } = require("../middlewares/check-admin");
 
 module.exports = (app, db) => {
     
-    app.get('/canchas', checkUser, async (req, res) => {
+    app.get('/canchas', async (req, res) => {
         
         const listaCanchas = await db.Cancha.findAll();
 

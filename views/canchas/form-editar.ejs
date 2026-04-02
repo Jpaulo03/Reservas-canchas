@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow border-0">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">Editar Cancha</h3>
+                    <a href="/canchas" class="btn btn-outline-secondary btn-sm">Volver</a>
+                </div>
+
+                <form action="/canchas/editar/<%= cancha.id %>" method="POST">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre de la Cancha</label>
+                        <input type="text" name="nombre" class="form-control" 
+                               value="<%= cancha.nombre %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tipo de Deporte</label>
+                        <select name="tipo_id" class="form-select" required>
+                            <% tipos.forEach(tipo => { %>
+                                <option value="<%= tipo.id %>" 
+                                    <%= cancha.tipo_id == tipo.id ? 'selected' : '' %>>
+                                    <%= tipo.nombre %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Precio por Hora</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" name="precio_por_hora" class="form-control" 
+                                       value="<%= cancha.precio_por_hora %>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Estado del Sistema</label>
+                            <select name="estado" class="form-select">
+                                <option value="activa" <%= cancha.estado === 'activa' ? 'selected' : '' %>>Activa</option>
+                                <option value="inactiva" <%= cancha.estado === 'inactiva' ? 'selected' : '' %>>Inactiva</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-warning btn-lg text-dark fw-bold">
+                            Actualizar Información
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+                
+                <form action="/canchas/eliminar/<%= cancha.id %>" method="POST" 
+                      onsubmit="return confirm('¿Estás seguro de eliminar esta cancha permanentemente?')">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i> Eliminar Cancha
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer') %>
