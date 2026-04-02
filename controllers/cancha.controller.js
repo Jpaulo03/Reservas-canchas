@@ -1,4 +1,5 @@
 const { checkUser } = require("../middlewares/check-user");
+const { checkAdmin } = require("../middlewares/check-admin");
 
 module.exports = (app, db) => {
     
@@ -9,15 +10,12 @@ module.exports = (app, db) => {
         res.render('canchas/list-canchas', { canchas: listaCanchas });
     });
 
-    app.get('/canchas/nueva', checkUser, async (req, res) => {
-
+    app.get('/canchas/nueva', checkAdmin, async (req, res) => {
         const tipos = await db.TipoCancha.findAll();
-        
         res.render('canchas/form-cancha', { tipos: tipos });
     });
 
-    app.post('/canchas/nueva', checkUser, async (req, res) => {
-
+    app.post('/canchas/nueva', checkAdmin, async (req, res) => {
         const { nombre, precio_por_hora, tipo_id } = req.body;
 
         await db.Cancha.create({
