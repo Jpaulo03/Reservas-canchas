@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+<h2 class="mb-4">Nuestras Canchas</h2>
+
+<div class="row">
+    <% canchas.forEach(cancha => { %>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><%= cancha.nombre %></h5>
+                    <p class="card-text">
+                        <span class="badge bg-info text-dark">Precio: $<%= cancha.precio_por_hora %>/hr</span>
+                        <span class="badge <%= cancha.estado === 'activa' ? 'bg-success' : 'bg-secondary' %>">
+                            <%= cancha.estado %>
+                        </span>
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0 d-grid gap-2">
+                    <% if (locals.user) { %>
+                        <a href="/reservar/<%= cancha.id %>" class="btn btn-outline-primary">Reservar</a>
+                        <a href="/canchas/<%= cancha.id %>/resenas" class="btn btn-link btn-sm text-decoration-none">Ver Reseñas</a>
+                        <% if (locals.user.rol === 'admin') { %>
+                            <div class="btn-group mt-2">
+                                <a href="/canchas/editar/<%= cancha.id %>" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="/horarios/nuevo/<%= cancha.id %>" class="btn btn-sm btn-dark">+ Horario</a>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <a href="/login" class="btn btn-secondary disabled">Inicia sesión para realizadar una reserva</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Reservar en: <%= cancha.nombre %></h3>
+        <p class="text-muted">Selecciona una fecha para ver horarios disponibles.</p>
+        <form action="/reservar/<%= cancha.id %>" method="GET" class="mb-4">
+            <div class="input-group">
+                <input type="date" name="fecha" class="form-control" value="<%= fechaSeleccionada %>">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <h4>Horarios Disponibles</h4>
+        <div class="list-group">
+            <% if (horarios.length === 0) { %>
+                <div class="alert alert-warning">No hay horarios disponibles para esta fecha.</div>
+            <% } %>
+            <% horarios.forEach(h => { %>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong><%= h.fecha %></strong> | <%= h.hora_inicio %> - <%= h.hora_fin %>
+                    </div>
+                    <form action="/reservar/<%= h.id %>" method="POST">
+                        <button type="submit" class="btn btn-success btn-sm">Confirmar Reserva</button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer') %>

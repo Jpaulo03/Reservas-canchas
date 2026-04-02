@@ -1,0 +1,39 @@
+<%- include('../partials/header') %>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3><%= locals.cancha ? 'Editar Cancha' : 'Nueva Cancha' %></h3>
+                <form action="<%= locals.cancha ? '/canchas/editar/'+cancha.id : '/canchas/nueva' %>" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Cancha</label>
+                        <input type="text" name="nombre" class="form-control" value="<%= locals.cancha ? cancha.nombre : '' %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Cancha</label>
+                        <select name="tipo_id" class="form-select">
+                            <% tipos.forEach(tipo => { %>
+                                <option value="<%= tipo.id %>" <%= locals.cancha && cancha.tipo_id == tipo.id ? 'selected' : '' %>><%= tipo.nombre %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Precio por Hora</label>
+                        <input type="number" name="precio_por_hora" class="form-control" value="<%= locals.cancha ? cancha.precio_por_hora : '' %>" required>
+                    </div>
+                    <% if (locals.cancha) { %>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="activa" <%= cancha.estado === 'activa' ? 'selected' : '' %>>Activa</option>
+                                <option value="inactiva" <%= cancha.estado === 'inactiva' ? 'selected' : '' %>>Inactiva</option>
+                            </select>
+                        </div>
+                    <% } %>
+                    <button type="submit" class="btn btn-success w-100">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer') %>
