@@ -28,4 +28,13 @@ module.exports = (app, db) => {
         res.redirect('/canchas');
     });
 
+    app.post('/horarios/eliminar/:id', checkAdmin, async (req, res) => {
+        const idDelHorario = req.params.id;
+
+        await db.Horario.destroy({
+            where: { id: idDelHorario }
+        });
+
+        res.redirect('/canchas');
+    });
 }

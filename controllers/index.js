@@ -4,4 +4,5 @@ module.exports = (app, db) => {
     require('./horario.controller')(app, db);
     require('./reserva.controller')(app, db);
     require('./resena.controller')(app, db);
+    require('./tipo-cancha.controller.js')(app, db);
 }

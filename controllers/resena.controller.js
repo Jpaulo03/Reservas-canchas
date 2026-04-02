@@ -27,4 +27,22 @@ module.exports = (app, db) => {
         res.redirect('/canchas');
     });
 
+    app.get('/canchas/:cancha_id/resenas', checkUser, async (req, res) => {
+        const idDeLaCancha = req.params.cancha_id;
+
+        const cancha = await db.Cancha.findByPk(idDeLaCancha);
+
+        const resenas = await db.Resena.findAll({
+            where: { cancha_id: idDeLaCancha },
+            include: [
+                { 
+                    model: db.Usuario, 
+                    attributes: ['nombre'] 
+                }
+            ],
+            order: [['createdAt', 'DESC']] 
+        });
+
+        res.render('resenas/list-resenas', { cancha: cancha, resenas: resenas });
+    });
 }

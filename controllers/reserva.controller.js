@@ -1,20 +1,37 @@
 const { checkUser } = require("../middlewares/check-user");
+const { checkAdmin } = require("../middlewares/check-admin");
 
 module.exports = (app, db) => {
     
     app.get('/reservar/:cancha_id', checkUser, async (req, res) => {
         const idDeLaCancha = req.params.cancha_id;
 
+        const fechaBuscada = req.query.fecha;
+
         const cancha = await db.Cancha.findByPk(idDeLaCancha);
 
+        let reglasBusqueda = {
+            cancha_id: idDeLaCancha,
+            disponible: true
+        };
+
+        if (fechaBuscada) {
+            reglasBusqueda.fecha = fechaBuscada;
+        }
+
         const horariosDisponibles = await db.Horario.findAll({
-            where: {
-                cancha_id: idDeLaCancha,
-                disponible: true
-            }
+            where: reglasBusqueda,
+            order: [
+                ['fecha', 'ASC'], 
+                ['hora_inicio', 'ASC']
+            ]
         });
 
-        res.render('reservas/form-reserva', { cancha: cancha, horarios: horariosDisponibles });
+        res.render('reservas/form-reserva', { 
+            cancha: cancha, 
+            horarios: horariosDisponibles,
+            fechaSeleccionada: fechaBuscada
+        });
     });
 
     app.post('/reservar/:horario_id', checkUser, async (req, res) => {
@@ -71,5 +88,33 @@ module.exports = (app, db) => {
         }
         
         res.redirect('/mis-reservas');
+    });
+
+    app.get('/admin/reservas', checkAdmin, async (req, res) => {
+        
+        const todasLasReservas = await db.Reserva.findAll({
+            include: [
+                { model: db.Usuario },
+                {
+                    model: db.Horario,
+                    include: [db.Cancha]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+
+        res.render('reservas/admin-reservas', { reservas: todasLasReservas });
+    });
+
+    app.post('/admin/reservas/estado/:id', checkAdmin, async (req, res) => {
+        const idDeLaReserva = req.params.id;
+        const { nuevo_estado } = req.body; 
+
+        await db.Reserva.update(
+            { estado: nuevo_estado },
+            { where: { id: idDeLaReserva } }
+        );
+
+        res.redirect('/admin/reservas');
     });
 }
