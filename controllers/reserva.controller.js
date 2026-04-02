@@ -52,4 +52,24 @@ module.exports = (app, db) => {
 
         res.render('reservas/mis-reservas', { reservas: misReservas });
     });
+
+    app.post('/reservas/cancelar/:reserva_id', checkUser, async (req, res) => {
+        const idDeLaReserva = req.params.reserva_id;
+
+        const reserva = await db.Reserva.findByPk(idDeLaReserva);
+
+        if (reserva) {
+            await db.Reserva.update(
+                { estado: 'cancelada' },
+                { where: { id: idDeLaReserva } }
+            );
+
+            await db.Horario.update(
+                { disponible: true },
+                { where: { id: reserva.horario_id } }
+            );
+        }
+        
+        res.redirect('/mis-reservas');
+    });
 }

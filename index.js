@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 
 const db = require('./models');
+const seed = require('./config/seed');
 
 app.set('view engine', 'ejs');
 
@@ -24,13 +25,12 @@ require('./controllers')(app, db);
 
 db.sequelize.sync({
     // force: true
-}).then(() => {
-    console.log("Base de datos sincronizada. Las tablas han sido creadas.");
+}).then(async() => {
+    console.log("Base de datos sincronizada.");
     
+    await seed(db);
+
     app.listen(port, () => {
         console.log(`Servidor corriendo en http://localhost:${port}`);
     });
-
-}).catch(error => {
-    console.error("Error al sincronizar la base de datos:", error);
 });
